@@ -67,8 +67,8 @@ html, body { margin: 0; padding: 0; background: #04060f; }
 
         <sc-if value="{{ isImage }}" hint-placeholder-val="{{ true }}">
           <div style="padding: 9px; border: 1px solid rgba(255,255,255,0.38); background: rgba(255,255,255,0.03);">
-            <div style="border: 1px solid rgba(255,255,255,0.18);">
-              <image-slot id="artwork-hero" style="display:block; width:380px; height:540px;" radius="0" placeholder="拖曳作品圖"></image-slot>
+            <div style="border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.04);">
+              <img src="{{ heroImg }}" alt="{{ title }}" style="display:block; max-width:520px; max-height:600px; width:auto; height:auto;" />
             </div>
           </div>
         </sc-if>
@@ -164,7 +164,25 @@ html, body { margin: 0; padding: 0; background: #04060f; }
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { playing: false, cur: 0, dur: 0 };
+  state = { playing: false, cur: 0, dur: 0, work: null };
+
+  componentDidMount() {
+    let year = '2024', id = null;
+    try {
+      const p = new URLSearchParams(location.search);
+      year = p.get('year') || '2024';
+      id = p.get('id');
+    } catch (e) {}
+    if (id && ['2024', '2025', '2026'].includes(year)) {
+      fetch(`assets/works-${year}.json`)
+        .then(r => r.json())
+        .then(list => {
+          const w = list.find(x => String(x.id) === String(id));
+          if (w) this.setState({ work: w });
+        })
+        .catch(() => {});
+    }
+  }
 
   fmt(s) {
     if (!s || !isFinite(s)) return '0:00';
@@ -237,7 +255,15 @@ class Component extends DCLogic {
         concept: '以生成音樂描繪臺北各商圈的節奏與氣味,從迪化街的懷舊旋律到信義區的電子脈動,讓聲響成為一張可聆聽的城市地圖,帶聽者漫遊街區之間。'
       }
     };
-    const meta = META[type];
+    const meta = Object.assign({}, META[type]);
+    const work = this.state.work;
+    if (work) {
+      meta.title = work.title || meta.title;
+      meta.author = work.author || meta.author;
+      meta.concept = work.concept || meta.concept;
+      meta.tools = (work.tools && work.tools.length) ? work.tools.join('、') : '—';
+    }
+    const heroImg = work ? `assets/works/${work.filename}` : 'assets/works/work-2024-001.jpg';
 
     const dur = this.state.dur;
     const cur = this.state.cur;
@@ -265,6 +291,7 @@ class Component extends DCLogic {
       backHref: `Year${year}.dc.html`, backYear: year,
       isImage: type === 'image', isComic: type === 'comic', isVideo: type === 'video', isMusic: type === 'music',
       title: meta.title, author: meta.author, tools: meta.tools, concept: meta.concept,
+      heroImg,
       musicBars,
       ytSrc: `https://www.youtube.com/embed/${YT_ID}`,
       ytWatch: `https://www.youtube.com/watch?v=${YT_ID}`,
