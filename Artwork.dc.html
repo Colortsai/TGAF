@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face {
+  font-family: 'RiXingSong';
+  src: url('assets/rixingsong-semibold.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
+}
+@keyframes artFloat {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-14px); }
+  100% { transform: translateY(0px); }
+}
+@keyframes twinkle {
+  0%,100% { opacity: var(--lo, 0.18); transform: scale(0.8); }
+  50%     { opacity: var(--hi, 1); transform: scale(1.15); }
+}
+@keyframes wave {
+  0%,100% { transform: scaleY(0.4); }
+  50%     { transform: scaleY(1); }
+}
+* { box-sizing: border-box; }
+</style>
+<script src="assets/image-slot.js"></script>
+</helmet>
+<div style="width: 1600px; height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; overflow: hidden; position: relative;">
+
+  <nav style="position: relative; z-index: 30; height: 64px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
+    <a href="Banner.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+      <img src="assets/logo.png" alt="臺北生成藝術節 TAIPEI GENERATIVE ART FESTIVAL" style="height: 44px; width: auto; display: block;" />
+    </a>
+    <div style="display: flex; align-items: center; gap: 50px;">
+      <a href="Banner.dc.html" style="text-decoration:none; color:#fff; opacity:0.8; font-size:18px; letter-spacing:3px; font-weight:500;" style-hover="opacity:1;">首頁</a>
+      <a href="#" style="text-decoration:none; color:#fff; opacity:0.8; font-size:18px; letter-spacing:3px; font-weight:500;" style-hover="opacity:1;">活動資訊</a>
+      <a href="#" style="text-decoration:none; color:#fff; opacity:0.8; font-size:18px; letter-spacing:3px; font-weight:500;" style-hover="opacity:1;">活動公告</a>
+      <a href="#" style="text-decoration:none; color:#fff; opacity:0.8; font-size:18px; letter-spacing:3px; font-weight:500;" style-hover="opacity:1;">最新消息</a>
+      <a href="Gallery.dc.html" style="position:relative; text-decoration:none; color:#fff; opacity:1; font-size:18px; letter-spacing:3px; font-weight:500;">線上藝廊<span style="position:absolute; left:0; right:0; bottom:-2px; height:2px; border-radius:2px; background:#fff;"></span></a>
+    </div>
+  </nav>
+
+  <div style="position: relative; height: 916px; overflow: hidden;">
+    <img src="assets/galaxy.png" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;" />
+    <div style="position: absolute; inset: 0; background: radial-gradient(120% 100% at 30% 40%, rgba(4,6,15,0.35) 20%, rgba(4,6,15,0.82) 100%);"></div>
+
+    <div style="position: absolute; inset: 0; z-index: 5; pointer-events: none;">
+      <sc-for list="{{ stars }}" as="s" hint-placeholder-count="0">
+        <span style="{{ s.style }}"></span>
+      </sc-for>
+    </div>
+
+    <a href="#" aria-label="上一件" style="position: absolute; z-index: 26; left: 40px; top: 50%; transform: translateY(-50%); width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.65); font-size: 46px; font-family: 'Noto Serif TC', serif; text-decoration: none; line-height: 1; transition: color .2s, transform .2s;" style-hover="color: #fff; transform: translateY(-50%) translateX(-4px);">‹</a>
+    <a href="#" aria-label="下一件" style="position: absolute; z-index: 26; right: 40px; top: 50%; transform: translateY(-50%); width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.65); font-size: 46px; font-family: 'Noto Serif TC', serif; text-decoration: none; line-height: 1; transition: color .2s, transform .2s;" style-hover="color: #fff; transform: translateY(-50%) translateX(4px);">›</a>
+
+    <div style="position: absolute; z-index: 20; inset: 0; display: flex; align-items: center; gap: 100px; padding: 0 150px;">
+
+      <div style="flex: none; animation: artFloat 7s ease-in-out infinite; filter: drop-shadow(0 40px 60px rgba(0,0,0,0.55)) drop-shadow(0 0 50px rgba(120,150,220,0.22));">
+
+        <sc-if value="{{ isImage }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 9px; border: 1px solid rgba(255,255,255,0.38); background: rgba(255,255,255,0.03);">
+            <div style="border: 1px solid rgba(255,255,255,0.18);">
+              <image-slot id="artwork-hero" style="display:block; width:380px; height:540px;" radius="0" placeholder="拖曳作品圖"></image-slot>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isComic }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; align-items:stretch; gap:16px;">
+            <div style="padding:9px; border:1px solid rgba(255,255,255,0.34); background:rgba(255,255,255,0.03);">
+              <div style="position:relative; width:430px; height:600px; border:1px solid rgba(255,255,255,0.16); overflow-y:auto; overflow-x:hidden; background:#0a0d16;">
+                <img src="assets/manga-strip.jpg" alt="條漫" style="display:block; width:430px; height:auto;" />
+                <div style="position:sticky; bottom:0; left:0; right:0; height:54px; background:linear-gradient(transparent, rgba(10,13,22,0.9)); display:flex; align-items:flex-end; justify-content:center; padding-bottom:8px; pointer-events:none;">
+                  <span style="font-family:'Noto Sans TC',sans-serif; font-size:12px; letter-spacing:2px; color:rgba(255,255,255,0.65);">▾ 向下捲動閱讀</span>
+                </div>
+              </div>
+            </div>
+            <div style="flex:none; width:5px; align-self:stretch; border-radius:3px; background:rgba(255,255,255,0.12); overflow:hidden;">
+              <div style="width:100%; height:26%; border-radius:3px; background:rgba(190,210,255,0.85);"></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isVideo }}" hint-placeholder-val="{{ false }}">
+          <div style="width: 660px; border: 1px solid rgba(255,255,255,0.3); background: #05070f; box-shadow: 0 22px 60px rgba(0,0,0,0.55);">
+            <div style="position: relative; width: 100%; height: 372px; background: #000;">
+              <iframe src="{{ ytSrc }}" title="作品影片" style="position:absolute; inset:0; width:100%; height:100%; border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; padding:12px 18px; background:#0a0d16; font-family:'Noto Sans TC',sans-serif;">
+              <span style="font-size:13px; color:rgba(255,255,255,0.55); letter-spacing:1px;">▶ YouTube 嵌入</span>
+              <span style="flex:1;"></span>
+              <a href="{{ ytWatch }}" target="_blank" style="font-size:13px; color:rgba(180,200,255,0.9); letter-spacing:1px; text-decoration:none;" style-hover="color:#fff;">在 YouTube 開啟 ↗</a>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isMusic }}" hint-placeholder-val="{{ false }}">
+          <div style="width: 460px;">
+            <div style="padding:9px; border:1px solid rgba(255,255,255,0.32); background:rgba(255,255,255,0.03);">
+              <div style="position:relative; width:440px; height:440px; border:1px solid rgba(255,255,255,0.16); background: radial-gradient(130% 130% at 50% 35%, #16314a 0%, #07101c 100%); overflow:hidden;">
+                <img src="assets/music-cover.png" alt="專輯封面" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" />
+                <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+                  <div style="width:78px; height:78px; border-radius:50%; background:rgba(10,14,22,0.45); border:1.5px solid rgba(180,205,255,0.85); display:flex; align-items:center; justify-content:center;">
+                    <span style="font-size:30px; line-height:1; color:rgba(255,255,255,0.9);">♪</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:16px; padding:18px 12px 0; font-family:'Noto Sans TC',sans-serif;">
+              <button onClick="{{ toggle }}" aria-label="播放/暫停" style="width:46px; height:46px; flex:none; border-radius:50%; background:rgba(190,210,255,0.16); border:1px solid rgba(190,210,255,0.7); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; transition:background .2s;" style-hover="background:rgba(190,210,255,0.3);">
+                <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex; gap:4px;"><span style="width:4px; height:16px; background:#fff; display:block;"></span><span style="width:4px; height:16px; background:#fff; display:block;"></span></span>
+                </sc-if>
+                <sc-if value="{{ paused }}" hint-placeholder-val="{{ true }}">
+                  <span style="margin-left:3px; border-style:solid; border-width:9px 0 9px 15px; border-color:transparent transparent transparent #fff;"></span>
+                </sc-if>
+              </button>
+              <div style="flex:1; display:flex; align-items:flex-end; gap:3px; height:40px; overflow:hidden;">
+                <sc-for list="{{ musicBars }}" as="b" hint-placeholder-count="0">
+                  <span style="{{ b.style }}"></span>
+                </sc-for>
+              </div>
+              <span style="font-size:13px; color:rgba(255,255,255,0.7); flex:none; letter-spacing:1px; font-variant-numeric:tabular-nums;">{{ timeLabel }}</span>
+            </div>
+
+            <div onClick="{{ seek }}" style="margin:14px 12px 0; height:6px; border-radius:4px; background:rgba(255,255,255,0.16); position:relative; cursor:pointer;">
+              <div style="position:absolute; left:0; top:0; bottom:0; width: {{ progPct }}; background:rgba(190,210,255,0.9); border-radius:4px;"></div>
+            </div>
+
+            <audio ref="{{ audioRef }}" src="assets/moonland.mp3" style="display:none;"></audio>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <div style="flex: 1; color: #fff; max-width: 600px;">
+        <div style="font-family:'Noto Sans TC',sans-serif; font-size:14px; letter-spacing:3px; color:rgba(255,255,255,0.45); margin-bottom:8px;">作品名稱</div>
+        <h1 style="font-family:'RiXingSong','Noto Serif TC',serif; font-weight:600; font-size:58px; line-height:1.14; letter-spacing:5px; margin:0 0 34px;">{{ title }}</h1>
+
+        <div style="font-family:'Noto Sans TC',sans-serif; font-size:14px; letter-spacing:3px; color:rgba(255,255,255,0.45); margin-bottom:8px;">作者</div>
+        <div style="font-family:'RiXingSong','Noto Serif TC',serif; font-size:34px; letter-spacing:4px; margin-bottom:40px;">{{ author }}</div>
+
+        <div style="font-family:'Noto Sans TC',sans-serif; font-size:14px; letter-spacing:3px; color:rgba(180,200,255,0.85); margin-bottom:14px;">創作理念</div>
+        <p style="font-family:'Noto Sans TC',sans-serif; font-size:16px; line-height:1.95; letter-spacing:0.5px; color:rgba(255,255,255,0.74); margin:0 0 36px; max-width:560px; text-wrap:pretty;">{{ concept }}</p>
+
+        <div style="font-family:'Noto Sans TC',sans-serif; font-size:14px; letter-spacing:3px; color:rgba(180,200,255,0.85); margin-bottom:10px;">使用工具</div>
+        <div style="font-family:'Noto Sans TC',sans-serif; font-size:18px; letter-spacing:2px; color:rgba(255,255,255,0.85);">{{ tools }}</div>
+      </div>
+
+    </div>
+
+    <a href="{{ backHref }}" style="position: absolute; z-index: 26; left: 56px; bottom: 44px; display: inline-flex; align-items: center; gap: 10px; padding: 11px 26px; border: 1px solid rgba(255,255,255,0.4); border-radius: 999px; color: rgba(255,255,255,0.85); font-family: 'Noto Sans TC', sans-serif; font-size: 16px; letter-spacing: 3px; text-decoration: none; background: rgba(0,0,0,0.25); transition: all .2s;" style-hover="border-color:#fff; color:#fff; background: rgba(255,255,255,0.1);">◀&nbsp;&nbsp;返回 {{ backYear }} 列表</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { playing: false, cur: 0, dur: 0 };
+
+  fmt(s) {
+    if (!s || !isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60);
+    const ss = Math.floor(s % 60);
+    return m + ':' + String(ss).padStart(2, '0');
+  }
+
+  toggle = () => {
+    const a = this._audio;
+    if (!a) return;
+    if (a.paused) { a.play(); this.setState({ playing: true }); }
+    else { a.pause(); this.setState({ playing: false }); }
+  };
+
+  setAudio = (el) => {
+    if (!el || el === this._audio) return;
+    this._audio = el;
+    el.addEventListener('timeupdate', () => this.setState({ cur: el.currentTime }));
+    el.addEventListener('loadedmetadata', () => this.setState({ dur: el.duration }));
+    el.addEventListener('ended', () => this.setState({ playing: false, cur: 0 }));
+  };
+
+  buildStars() {
+    if (this._stars) return this._stars;
+    const rnd = (s) => { const x = Math.sin(s * 99.13) * 43758.5453; return x - Math.floor(x); };
+    const out = [];
+    for (let i = 0; i < 70; i++) {
+      const left = rnd(i + 1) * 100;
+      const top = rnd(i + 7.3) * 100;
+      const size = 1 + rnd(i + 3.1) * 2.2;
+      const dur = 2.0 + rnd(i + 5.7) * 3.8;
+      const delay = rnd(i + 11.9) * 4;
+      const hi = 0.6 + rnd(i + 2.2) * 0.4;
+      const big = rnd(i + 8.8) > 0.9;
+      const glow = big ? `0 0 ${size * 3}px ${size}px rgba(180,200,255,0.5)` : 'none';
+      out.push({ style: `position:absolute; left:${left}%; top:${top}%; width:${size}px; height:${size}px; border-radius:50%; background:#eef3ff; box-shadow:${glow}; --hi:${hi}; --lo:0.1; animation: twinkle ${dur}s ease-in-out ${delay}s infinite; will-change: opacity, transform;` });
+    }
+    this._stars = out;
+    return out;
+  }
+  renderVals() {
+    let year = '2024';
+    let type = 'image';
+    try {
+      const p = new URLSearchParams(location.search);
+      const y = p.get('year');
+      if (['2024', '2025', '2026'].includes(y)) year = y;
+      const t = p.get('type');
+      if (['video', 'music', 'comic'].includes(t)) type = t;
+    } catch (e) {}
+
+    const META = {
+      image: {
+        title: '綿延承傳之歌', author: '彭麗', tools: 'Midjourney、MyEdit',
+        concept: '作品以摺頁風格展現鮮活的生命力,同時保存單幅繪製那些留於歷史中的影像。客家人的勤奮與創新,深刻影響著臺北的城市性格,他們帶來堅韌不拔的精神,為今日臺北的榮景奠定了基礎,與臺北的現代多元文化相互交融,展現了動感、智慧與對土地的深厚情感。'
+      },
+      comic: {
+        title: '酷課雲大冒險：我才不是為了學習！', author: '黃宥晴', tools: 'Midjourney、Clip Studio Paint',
+        concept: '以四幕條漫描繪一名少年意外登入「酷課雲」的奇幻冒險：從誤入虛擬世界、手足無措,到揭開雲端的秘密,最終帶著改變回到現實。生成圖像串連起科技與校園生活的想像,讓學習不再只是學習,而是一場屬於臺北少年的數位旅程。'
+      },
+      video: {
+        title: '秋 OUT 音樂節', author: '林子安', tools: 'Runway、剪映 CapCut',
+        concept: '以生成式影像重構秋日音樂節的聲與光,讓演算法參與敘事節奏,捕捉城市夜晚流動的能量與情緒。影片在真實與生成之間交織,呈現一場屬於臺北的數位狂歡。'
+      },
+      music: {
+        title: '暢遊臺北商圈', author: '陳威宇', tools: 'Suno、MyEdit',
+        concept: '以生成音樂描繪臺北各商圈的節奏與氣味,從迪化街的懷舊旋律到信義區的電子脈動,讓聲響成為一張可聆聽的城市地圖,帶聽者漫遊街區之間。'
+      }
+    };
+    const meta = META[type];
+
+    const dur = this.state.dur;
+    const cur = this.state.cur;
+    const playing = this.state.playing;
+    const ratio = dur ? cur / dur : 0;
+    const playState = playing ? 'running' : 'paused';
+
+    const N = 40;
+    const prog = Math.round(N * ratio);
+    const musicBars = [];
+    for (let i = 0; i < N; i++) {
+      const r = Math.sin(i * 12.9898) * 43758.5453;
+      const f = r - Math.floor(r);
+      const hgt = 7 + Math.round(f * 31);
+      const on = i < prog;
+      const col = on ? 'rgba(190,210,255,0.95)' : 'rgba(255,255,255,0.2)';
+      musicBars.push({ style: `width:4px; height:${hgt}px; border-radius:2px; background:${col}; flex:none; transform-origin:bottom; animation: wave ${(0.9 + f * 0.9).toFixed(2)}s ease-in-out ${(f * 1.1).toFixed(2)}s infinite; animation-play-state:${playState};` });
+    }
+
+    const YT_ID = 'aqz-KE-bpKQ';
+
+    return {
+      stars: this.buildStars(),
+      backHref: `Year${year}.dc.html`, backYear: year,
+      isImage: type === 'image', isComic: type === 'comic', isVideo: type === 'video', isMusic: type === 'music',
+      title: meta.title, author: meta.author, tools: meta.tools, concept: meta.concept,
+      musicBars,
+      ytSrc: `https://www.youtube.com/embed/${YT_ID}`,
+      ytWatch: `https://www.youtube.com/watch?v=${YT_ID}`,
+      playing, paused: !playing,
+      timeLabel: `${this.fmt(cur)} / ${this.fmt(dur)}`,
+      progPct: (ratio * 100).toFixed(1) + '%',
+      toggle: this.toggle,
+      audioRef: this.setAudio,
+      seek: (e) => {
+        const a = this._audio; if (!a || !this.state.dur) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const rr = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        a.currentTime = rr * this.state.dur;
+        this.setState({ cur: a.currentTime });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

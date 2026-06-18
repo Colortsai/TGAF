@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face {
+  font-family: 'RiXingSong';
+  src: url('assets/rixingsong-semibold.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
+}
+@keyframes shipFloat {
+  0%   { transform: translateY(0px) rotate(-0.15deg); }
+  50%  { transform: translateY(-22px) rotate(0.15deg); }
+  100% { transform: translateY(0px) rotate(-0.15deg); }
+}
+@keyframes shipShadow {
+  0%   { transform: scaleX(1); opacity: 0.5; }
+  50%  { transform: scaleX(0.86); opacity: 0.28; }
+  100% { transform: scaleX(1); opacity: 0.5; }
+}
+@keyframes twinkle {
+  0%,100% { opacity: var(--lo, 0.25); transform: scale(0.85); }
+  50%     { opacity: var(--hi, 1); transform: scale(1.15); }
+}
+* { box-sizing: border-box; }
+</style>
+</helmet>
+<div style="width: 1600px; height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; overflow: hidden; position: relative;">
+
+  <nav style="position: relative; z-index: 30; height: 64px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <img src="assets/logo.png" alt="臺北生成藝術節 TAIPEI GENERATIVE ART FESTIVAL" style="height: 44px; width: auto; display: block;" />
+    </div>
+    <div style="display: flex; align-items: center; gap: 50px;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+        <a href="{{ item.href }}" style="{{ item.style }}" style-hover="color: #ffffff; opacity: 1;">
+          <span>{{ item.label }}</span>
+          <span style="{{ item.underline }}"></span>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+
+  <div style="position: relative; height: 916px; overflow: hidden;">
+
+    <img src="assets/galaxy.png" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
+    <div style="position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 45%, rgba(4,6,15,0) 45%, rgba(4,6,15,0.5) 100%);"></div>
+
+    <div style="position: absolute; inset: 0; z-index: 5; pointer-events: none;">
+      <sc-for list="{{ stars }}" as="s" hint-placeholder-count="0">
+        <span style="{{ s.style }}"></span>
+      </sc-for>
+    </div>
+
+    <div style="position: absolute; top: 28px; left: 56px; right: 56px; bottom: 64px; border: 1.5px solid rgba(255,255,255,0.85); z-index: 25; pointer-events: none;"></div>
+
+    <div style="position: absolute; z-index: 15; left: 50%; top: 53%; transform: translate(-50%, -50%); width: 1560px; pointer-events: none;">
+      <div style="position: absolute; left: 50%; bottom: -6px; width: 62%; height: 66px; transform: translateX(-50%); background: radial-gradient(50% 50% at 50% 50%, rgba(60,90,160,0.5) 0%, rgba(60,90,160,0) 70%); filter: blur(14px); animation: shipShadow 7s ease-in-out infinite;"></div>
+      <img src="assets/ship.png" alt="太空母艦" style="display: block; width: 100%; height: auto; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.6)); animation: shipFloat 7s ease-in-out infinite; will-change: transform;" />
+    </div>
+
+    <div style="position: absolute; z-index: 10; left: 100px; top: 56px; font-family: 'RiXingSong', 'Noto Serif TC', serif; font-weight: 600; color: #fff; font-size: 168px; line-height: 0.96; letter-spacing: 10px; text-shadow: 0 6px 44px rgba(0,0,0,0.6); white-space: nowrap;">臺北創世</div>
+
+    <div style="position: absolute; z-index: 20; right: 86px; bottom: 108px; font-family: 'RiXingSong', 'Noto Serif TC', serif; font-weight: 600; color: #fff; font-size: 168px; line-height: 0.96; letter-spacing: 10px; text-shadow: 0 6px 44px rgba(0,0,0,0.6); white-space: nowrap;">演算覺醒</div>
+
+    <div style="position: absolute; z-index: 22; left: 100px; bottom: 92px; font-family: 'RiXingSong','Noto Serif TC', serif; font-weight: 600; color: #fff; font-size: 46px; line-height: 1.18; letter-spacing: 6px; text-shadow: 0 4px 24px rgba(0,0,0,0.7);">2026臺北<br />生成藝術節</div>
+
+    <div style="position: absolute; z-index: 22; right: 86px; bottom: 74px; display: flex; align-items: center; gap: 0; font-family: 'RiXingSong','Noto Serif TC', serif; font-weight: 600; color: #fff; font-size: 25px; letter-spacing: 3px; white-space: nowrap; text-shadow: 0 3px 18px rgba(0,0,0,0.8);">2026 TAIPEI GENERATIVE ART FESTIVAL</div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { active: '首頁' };
+
+  buildStars() {
+    if (this._stars) return this._stars;
+    const rnd = (seed) => {
+      const x = Math.sin(seed * 99.13) * 43758.5453;
+      return x - Math.floor(x);
+    };
+    const out = [];
+    const N = 90;
+    for (let i = 0; i < N; i++) {
+      const left = rnd(i + 1) * 100;
+      const top = rnd(i + 7.3) * 100;
+      const size = 1 + rnd(i + 3.1) * 2.4;
+      const dur = 2.2 + rnd(i + 5.7) * 3.6;
+      const delay = rnd(i + 11.9) * 4;
+      const hi = 0.7 + rnd(i + 2.2) * 0.3;
+      const big = rnd(i + 8.8) > 0.86;
+      const glow = big ? `0 0 ${size * 3}px ${size}px rgba(180,200,255,0.55)` : 'none';
+      out.push({
+        style: `position:absolute; left:${left}%; top:${top}%; width:${size}px; height:${size}px; border-radius:50%; background:#eef3ff; box-shadow:${glow}; --hi:${hi}; --lo:0.12; animation: twinkle ${dur}s ease-in-out ${delay}s infinite; will-change: opacity, transform;`
+      });
+    }
+    this._stars = out;
+    return out;
+  }
+
+  renderVals() {
+    const items = [
+      { label: '首頁', href: 'Banner.dc.html', active: true },
+      { label: '活動資訊', href: '#', active: false },
+      { label: '活動公告', href: '#', active: false },
+      { label: '最新消息', href: '#', active: false },
+      { label: '線上藝廊', href: 'Gallery.dc.html', active: false }
+    ];
+    const navItems = items.map((it) => {
+      const isActive = it.active;
+      return {
+        label: it.label,
+        href: it.href,
+        style: `position:relative; background:none; border:none; padding:6px 2px; cursor:pointer; text-decoration:none; font-family:'Noto Serif TC',serif; font-size:18px; letter-spacing:3px; font-weight:500; color:#ffffff; opacity:${isActive ? 1 : 0.8}; transition:opacity .2s ease;`,
+        underline: `position:absolute; left:0; right:0; bottom:-2px; height:2px; border-radius:2px; background:${isActive ? '#ffffff' : 'transparent'}; transition:background .2s ease;`
+      };
+    });
+    return { navItems, stars: this.buildStars() };
+  }
+}
+</script>
+</body>
+</html>
