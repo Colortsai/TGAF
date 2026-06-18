@@ -29,10 +29,11 @@
   50%     { transform: scaleY(1); }
 }
 * { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #04060f; }
 </style>
 <script src="assets/image-slot.js"></script>
 </helmet>
-<div style="width: 1600px; height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; overflow: hidden; position: relative;">
+<div ref="{{ stageRef }}" style="width: 1600px; height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; overflow: hidden; position: relative;">
 
   <nav style="position: relative; z-index: 30; height: 64px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
     <a href="Banner.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
@@ -206,6 +207,8 @@ class Component extends DCLogic {
     return out;
   }
   renderVals() {
+    const _stageRef = (el) => { this._stage = el; if (el) el.style.zoom = window.innerWidth / 1600; };
+    if (!this._fitBound) { this._fitBound = true; this._fit = () => { if (this._stage) this._stage.style.zoom = window.innerWidth / 1600; }; window.addEventListener('resize', this._fit); }
     let year = '2024';
     let type = 'image';
     try {
@@ -258,6 +261,7 @@ class Component extends DCLogic {
 
     return {
       stars: this.buildStars(),
+      stageRef: _stageRef,
       backHref: `Year${year}.dc.html`, backYear: year,
       isImage: type === 'image', isComic: type === 'comic', isVideo: type === 'video', isMusic: type === 'music',
       title: meta.title, author: meta.author, tools: meta.tools, concept: meta.concept,

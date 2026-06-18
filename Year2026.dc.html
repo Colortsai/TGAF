@@ -29,9 +29,10 @@
   50%     { transform: scaleY(1); }
 }
 * { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #04060f; }
 </style>
 </helmet>
-<div style="width: 1600px; min-height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; position: relative; overflow: hidden;">
+<div ref="{{ stageRef }}" style="width: 1600px; min-height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; position: relative; overflow: hidden;">
 
   <img src="assets/galaxy.png" alt="" style="position: absolute; top:0; left:0; width: 100%; height: 1500px; object-fit: cover; opacity: 0.9;" />
   <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,6,15,0.55) 0%, rgba(4,6,15,0.78) 55%, #04060f 100%);"></div>
@@ -174,6 +175,8 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    const _stageRef = (el) => { this._stage = el; if (el) el.style.zoom = window.innerWidth / 1600; };
+    if (!this._fitBound) { this._fitBound = true; this._fit = () => { if (this._stage) this._stage.style.zoom = window.innerWidth / 1600; }; window.addEventListener('resize', this._fit); }
     const cats = this.cats();
     const ci = this.state.cat;
     const active = cats[ci];
@@ -221,7 +224,7 @@ class Component extends DCLogic {
       };
     });
 
-    return { catTabs, themeChips, works, stars: this.buildStars() };
+    return { catTabs, themeChips, works, stars: this.buildStars(), stageRef: _stageRef };
   }
 }
 </script>

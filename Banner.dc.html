@@ -30,9 +30,10 @@
   50%     { opacity: var(--hi, 1); transform: scale(1.15); }
 }
 * { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #04060f; }
 </style>
 </helmet>
-<div style="width: 1600px; height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; overflow: hidden; position: relative;">
+<div ref="{{ stageRef }}" style="width: 1600px; height: 980px; background: #04060f; font-family: 'Noto Serif TC', serif; overflow: hidden; position: relative;">
 
   <nav style="position: relative; z-index: 30; height: 64px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
     <div style="display: flex; align-items: center; gap: 12px;">
@@ -81,6 +82,13 @@
 class Component extends DCLogic {
   state = { active: '首頁' };
 
+  componentDidMount() {
+    this._fit = () => { if (this._stage) this._stage.style.zoom = window.innerWidth / 1600; };
+    this._fit();
+    window.addEventListener('resize', this._fit);
+  }
+  componentWillUnmount() { if (this._fit) window.removeEventListener('resize', this._fit); }
+
   buildStars() {
     if (this._stars) return this._stars;
     const rnd = (seed) => {
@@ -123,7 +131,7 @@ class Component extends DCLogic {
         underline: `position:absolute; left:0; right:0; bottom:-2px; height:2px; border-radius:2px; background:${isActive ? '#ffffff' : 'transparent'}; transition:background .2s ease;`
       };
     });
-    return { navItems, stars: this.buildStars() };
+    return { navItems, stars: this.buildStars(), stageRef: (el) => { this._stage = el; if (el) el.style.zoom = window.innerWidth / 1600; } };
   }
 }
 </script>
